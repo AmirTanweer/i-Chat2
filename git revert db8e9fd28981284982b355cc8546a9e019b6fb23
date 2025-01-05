@@ -1,0 +1,17 @@
+[33mcommit 62c5f9da249c0c8e0c7e6662e7609de388376997[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: AmirTanweer <amirtanweer0@gmail.com>
+Date:   Sun Jan 5 09:28:00 2025 +0530
+
+    User model created
+
+[33mcommit db8e9fd28981284982b355cc8546a9e019b6fb23[m
+Author: AmirTanweer <amirtanweer0@gmail.com>
+Date:   Sat Jan 4 22:27:34 2025 +0530
+
+    Created simple server
+
+[33mcommit f8f65343f30e13ae194df9151ff5a522501b861a[m
+Author: AmirTanweer <amirtanweer0@gmail.com>
+Date:   Sat Jan 4 22:19:27 2025 +0530
+
+    initial commit
