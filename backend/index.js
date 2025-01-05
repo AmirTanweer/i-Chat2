@@ -6,6 +6,9 @@ const cors = require("cors");
 const connectDB = require("./db");
 const UserRouter=require('./routes/auth')
 const port=5000;
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+
 
 app.use(cors());
 app.use(express.json());
