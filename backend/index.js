@@ -20,9 +20,10 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('A user disconnected',socket.id);
   });
-  socket.on('message', (msg) => {
-    console.log('Received message:', msg);
-    io.emit('message', msg);  // Broadcast message to all clients
+  socket.on('data', (data) => {
+    console.log('Received data:',data.message);
+    data.isAdmin=false
+    socket.broadcast.emit('data', data);  // Broadcast message to all clients
   });
 });
 
