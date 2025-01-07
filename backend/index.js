@@ -1,20 +1,32 @@
-const express = require("express");
+const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
+
 const app = express();
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-const cors = require("cors");
-const connectDB = require("./db");
-const UserRouter=require('./routes/auth')
-const port=5000;
-const server = require('http').createServer(app);
-const io = require('socket.io')(server);
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST'],
+  },
+});
 
+app.get('/', (req, res) => {
+  res.send('Socket.io Server is running!');
+});
+ 
+io.on('connection', (socket) => {
+  console.log('A user connected' ,socket.id);
+  socket.on('disconnect', () => {
+    console.log('A user disconnected',socket.id);
+  });
+  socket.on('message', (msg) => {
+    console.log('Received message:', msg);
+    io.emit('message', msg);  // Broadcast message to all clients
+  });
+});
 
-app.use(cors());
-app.use(express.json());
-
-connectDB();
-app.use('/api/auth',UserRouter);
-app.listen(port, () => {
-    console.log("Server is running on port 5000");
-})
+const PORT = 4000;
+server.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
