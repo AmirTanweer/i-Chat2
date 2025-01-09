@@ -28,21 +28,24 @@ const Login = () => {
          const handleSubmit = async(e) => {
            e.preventDefault();
           await login(formData)
-           console.log('Form Data:', formData);  // Replace with actual login logic
+          //  console.log('Form Data:', formData);  // Replace with actual login logic
            setFormData({  email: '', password: '' });
          
 
          };
 
          useEffect(()=>{
-               if(localStorage.getItem('token')){
+              //  if(localStorage.getItem('token')) // for actual app
+              if(sessionStorage.getItem('token')) // for testing
+                {
          
                  navigate('/')
                  
                }
               
              
-           },[localStorage.getItem('token')])
+          //  },[localStorage.getItem('token')]) // for actual app
+              },[sessionStorage.getItem('token')])
   return (
    
         <div className="container d-flex justify-content-center align-items-center vh-100">
@@ -65,7 +68,7 @@ const Login = () => {
           </div>
           <div className="mb-3">
             <label htmlFor="password" className="form-label">Password</label>
-            <input
+            <input autoComplete='off'
               type="password"
               className="form-control"
               id="password"

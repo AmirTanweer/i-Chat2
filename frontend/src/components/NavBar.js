@@ -4,9 +4,21 @@ import React, { useEffect,useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 function NavBar() {
  const {logout,authtoken}=useContext(AuthContext)
+const navigate=useNavigate()
+useEffect(()=>{
+  // if(!localStorage.getItem('token'))  // for actual app
+   if(!sessionStorage.getItem('token')) // for testing
+    {
+    navigate('/login')
+  }
+  // console.log("authtoken -> ",authtoken)
+},[authtoken])
+
 const handleLogout=()=>{
+  
   logout()
 }
 
@@ -41,11 +53,20 @@ const handleLogout=()=>{
               </Link>
             </li>
             {
-              authtoken? <li className="nav-item">
+              authtoken?
+              <>
+               
+                <li className="nav-item">
+              <Link className="nav-link" to="/userdetails">
+                User
+              </Link>
+            </li>
+            <li>
               <Link className="nav-link" onClick={handleLogout}  >
                 Logout
               </Link>
             </li>
+                </>
             :
             <>
             <li className="nav-item">

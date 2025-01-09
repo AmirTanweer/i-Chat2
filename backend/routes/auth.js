@@ -50,7 +50,7 @@ router.post('/register',[
 router.post('/login',async(req,res)=>{
     const errors=validationResult(req);
     if(!errors.isEmpty()){
-        return res.status(400).json({errors: errors.array()});
+        return res.status(400).json({errors: errors.array()}); 
     }
     try{
          const {email,password}=req.body;
@@ -86,8 +86,9 @@ router.get('/getdetails', async (req, res) => {
       return res.status(400).json({ errors: errors.array() });
     }
     
-    try {
+    try {     
       const authHeader = req.headers.authorization; // Correct header for token
+      console.log('authHeader',authHeader)
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(403).json({ error: "Unauthorized Access" });
       }
