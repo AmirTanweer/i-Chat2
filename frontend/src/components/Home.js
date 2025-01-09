@@ -1,12 +1,30 @@
 import React from 'react'
 import MessageWindow from './MessageWindow'
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useContext } from 'react'
+import AuthContext from '../context/AuthContext'
 const Home = (props) => {
+  const navigate=useNavigate()
+  
+  const {getUserDetails}=useContext(AuthContext)
   const {data,messages,setData,sendMessage,handleOnChange}=props
   const [showInput, setShowInput] = useState(false);
+  useEffect(() => {
+      if(localStorage.getItem('token')){
+        navigate('/')
+        // getUserDetails()
+      }
+      else{
+        navigate('/login')
+      }
+  }, [localStorage.getItem('token')])
+  
+  
+
   return (
     <>
-    <h3 style={{display:"flex",justifyContent:"center", margin:'10px', padding:"5px",backgroundColor:"#605a70"}}>i-Chat (messaging app)</h3>
+    <h3 style={{display:"flex",justifyContent:"center", margin:'10px', padding:"5px",backgroundColor:"#f8f9fa"}}>i-Chat (messaging app)</h3>
     <section style={{width:"100%",height:"86.7vh"}}>
        <MessageWindow  messages={messages} data={data} setData={setData} />
     </section>

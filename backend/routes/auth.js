@@ -4,7 +4,7 @@ const router = express.Router();
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
+ 
 const { check, validationResult, body } = require("express-validator");
 
 //Route 1 - Create a user using: POST "/api/auth". No login required
@@ -16,7 +16,7 @@ router.post('/register',[
     const errors = validationResult(req);
     if(!errors.isEmpty()){
         return res.status(400).json({errors: errors.array()});
-    }
+    } 
     try{
     const {username,email,password}=req.body;
         let user = await User.findOne({email});
@@ -26,7 +26,7 @@ router.post('/register',[
         }
         let salt= await bcrypt.genSalt(10);
         const hashedPass= await bcrypt.hash(password,salt);
-
+ 
         user =new User({
             username:username,
             email:email,
@@ -66,7 +66,7 @@ router.post('/login',async(req,res)=>{
             user:{
                 id:user.id
             }
-          }
+          } 
           const token=jwt.sign(payload,process.env.SECRET,{ expiresIn: '1h' });
           res.status(200).json({
             message:"Successfully LoggedIn",
@@ -79,4 +79,35 @@ router.post('/login',async(req,res)=>{
 res.status(500).json({ error: "Internal Server Error" });
     }
 })
+//Route 3 - get user details using "POST" "/api/auth/getdetails" Login Required
+router.get('/getdetails', async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    
+    try {
+      const authHeader = req.headers.authorization; // Correct header for token
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(403).json({ error: "Unauthorized Access" });
+      }
+      
+      const token = authHeader.split(' ')[1]; // Extract the token
+      const decoded = jwt.verify(token, process.env.SECRET); // Verify the token
+      
+      if (!decoded) {
+        return res.status(403).json({ error: "Unauthorized Access" });
+      }
+      
+      const user = await User.findById(decoded.user.id).select('-password')// Fetch user details
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+  
+      res.status(200).json({ user }); // Respond with user details
+    } catch (error) {
+      console.error(error); // Log error for debugging
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
 module.exports=router

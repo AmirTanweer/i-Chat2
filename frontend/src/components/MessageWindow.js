@@ -3,7 +3,7 @@ import React from 'react'
 const MessageWindow = (props) => {
     const {data,messages,setData,sendMessage}=props
   return (
-    <div style={{backgroundColor:"#605a70",height:'100%'}}>
+    <div style={{backgroundColor:"#f8f9fa",height:'100%'}}>
         {
             messages.map((msg,index)=>(
                 msg.isAdmin===false?<div key={index} className='User-block' style={{width:'100%',height:'auto',display:'flex'}}>

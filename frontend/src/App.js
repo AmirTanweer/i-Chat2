@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import Home from './components/Home';
-
-const socket = io('http://localhost:4000');  // Replace with your server URL if necessary
+import NavBar from './components/NavBar';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import About from './components/About';
+import Signup from './auth/Signup';
+import Login from './auth/Login';
+import AuthState from './context/AuthState';
+const socket = io('http://localhost:5000');  // Replace with your server URL if necessary
 
 function App() {
+  
   const [data, setData] = useState({message:'',username:'',isAdmin:true});
   const [userMessage,setUserMessage]=useState('');
   const [messages, setMessages] = useState([]);
@@ -31,35 +37,28 @@ function App() {
     setData((prevData) => ({ ...prevData, [name]: value }));  // Correctly update the corresponding field
   };
   return (
-    <div >
-      <input type="text" name="username" id="username" value={data.username} onChange={handleOnChange} />
-      <Home messages={messages} data={data} setData={setData} sendMessage={sendMessage} handleOnChange={handleOnChange}/>
-      {/* <h1>Socket.io Chat</h1>
-      <div>
-        <input
-          type="text"
-          value={data.message} name='message'
-          onChange={handleOnChange}
-          placeholder="Type a message"
-        />
-        <input
-          type="text"
-          value={data.username} name='username'
-          onChange={handleOnChange}
-          placeholder="Type user name"
-        />
+    <>
+      {/* <input type="text" name="username" id="username" value={data.username} onChange={handleOnChange} /> */}
+      <AuthState>
 
-        <button onClick={sendMessage}>Send</button>
-      </div>
-      <ul>
-        {messages.map((msg,index) => (
-         <li key={index}>
-         <strong>{msg.username}: </strong>
-         {msg.message}
-       </li>
-        ))}
-      </ul> */}
-    </div>
+      <Router>
+      <NavBar/>
+       <Routes>
+
+
+      <Route path='/' element={<Home messages={messages} data={data} setData={setData} sendMessage={sendMessage} handleOnChange={handleOnChange}/>}/>
+      <Route path='/about' element={<About/>}/>
+      <Route path='/signup' element={<Signup/>}/>
+      <Route path='/login' element={<Login/>}/>
+      
+
+      
+      
+     
+       </Routes>
+      </Router>
+      </AuthState>
+    </>
   );
 }
 

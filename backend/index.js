@@ -1,9 +1,14 @@
 const express = require('express');
+const cors=require('cors')
 const http = require('http');
-const { Server } = require('socket.io');
 
+const { Server } = require('socket.io');
+const connectDB = require('./db');
+
+ 
 const app = express();
 const server = http.createServer(app);
+const UserRouter=require('./routes/auth')
 const io = new Server(server, {
   cors: {
     origin: 'http://localhost:3000',
@@ -11,9 +16,16 @@ const io = new Server(server, {
   },
 });
 
+app.use(cors());
+app.use(express.json());  // Add this line
+
+connectDB()
 app.get('/', (req, res) => {
   res.send('Socket.io Server is running!');
 });
+
+app.use('/api/auth',UserRouter);
+
  
 io.on('connection', (socket) => {
   console.log('A user connected' ,socket.id);
@@ -27,7 +39,7 @@ io.on('connection', (socket) => {
   });
 });
 
-const PORT = 4000;
+const PORT = 5000;
 server.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
